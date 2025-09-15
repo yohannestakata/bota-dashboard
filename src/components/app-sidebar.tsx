@@ -1,181 +1,181 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
+  AudioWaveform,
+  Command,
+  Frame,
+  GalleryVerticalEnd,
+  Map,
+  PieChart,
+  Settings2,
+  LayoutDashboard,
+  Building2,
+  MapPin,
+  Image as ImageIcon,
+  MessageSquare,
+  ListTree,
+  Zap,
+  Users,
+  BarChart3,
+} from "lucide-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
+  SidebarRail,
+} from "@/components/ui/sidebar";
 
+// This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
+  teams: [
     {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
+      name: "Acme Inc",
+      logo: GalleryVerticalEnd,
+      plan: "Enterprise",
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      name: "Acme Corp.",
+      logo: AudioWaveform,
+      plan: "Startup",
+    },
+    {
+      name: "Evil Corp.",
+      logo: Command,
+      plan: "Free",
+    },
+  ],
+  navMain: [
+    {
+      title: "Overview",
+      url: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Places",
+      url: "/places",
+      icon: Building2,
+      items: [
+        { title: "All Places", url: "/places" },
+        { title: "Categories", url: "/places/categories" },
+        { title: "Cuisines", url: "/places/cuisines" },
+      ],
+    },
+    {
+      title: "Branches",
+      url: "/branches",
+      icon: MapPin,
+      items: [
+        { title: "All Branches", url: "/branches" },
+        { title: "Hours", url: "/branches/hours" },
+        { title: "Amenities", url: "/branches/amenities" },
+        { title: "Menus", url: "/branches/menus" },
+      ],
+    },
+    {
+      title: "Media",
+      url: "/media",
+      icon: ImageIcon,
+      items: [
+        { title: "Place Photos", url: "/media/place-photos" },
+        { title: "Branch Photos", url: "/media/branch-photos" },
+        { title: "Review Photos", url: "/media/review-photos" },
+        { title: "Menu Item Photos", url: "/media/menu-item-photos" },
+      ],
+    },
+    {
+      title: "Reviews",
+      url: "/reviews",
+      icon: MessageSquare,
+      items: [
+        { title: "Moderation Queue", url: "/reviews/moderation" },
+        { title: "Recent Reviews", url: "/reviews/recent" },
+      ],
+    },
+    {
+      title: "Requests",
+      url: "/requests",
+      icon: ListTree,
+      items: [
+        { title: "Add Requests", url: "/requests/add" },
+        { title: "Edit Requests", url: "/requests/edit" },
+      ],
+    },
+    {
+      title: "Featured",
+      url: "/featured",
+      icon: Zap,
+      items: [
+        { title: "Featured Places", url: "/featured" },
+        { title: "Refresh/Jobs", url: "/featured/jobs" },
+      ],
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: Users,
+      items: [{ title: "Profiles", url: "/users" }],
     },
     {
       title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
+      url: "/analytics",
+      icon: BarChart3,
+      items: [{ title: "Activity & Trends", url: "/analytics" }],
     },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
     {
       title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
+      url: "/settings",
+      icon: Settings2,
+      items: [
+        { title: "General", url: "/settings" },
+        { title: "Integrations", url: "/settings/integrations" },
+      ],
     },
   ],
-  documents: [
+  projects: [
     {
-      name: "Data Library",
+      name: "Design Engineering",
       url: "#",
-      icon: IconDatabase,
+      icon: Frame,
     },
     {
-      name: "Reports",
+      name: "Sales & Marketing",
       url: "#",
-      icon: IconReport,
+      icon: PieChart,
     },
     {
-      name: "Word Assistant",
+      name: "Travel",
       url: "#",
-      icon: IconFileWord,
+      icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
-  )
+  );
 }
