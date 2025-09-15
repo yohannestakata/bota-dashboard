@@ -6,7 +6,7 @@ import {
   IconShare3,
   IconTrash,
 } from "@tabler/icons-react";
-import type * as React from "react";
+import React from "react";
 
 import {
   DropdownMenu,

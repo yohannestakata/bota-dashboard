@@ -109,6 +109,12 @@ export const schema = z.object({
   target: z.string(),
   limit: z.string(),
   reviewer: z.string(),
+  slug: z.string().optional(),
+  category: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+  review_count: z.number().optional(),
+  average_rating: z.number().optional(),
 });
 
 // Create a separate component for the drag handle
@@ -183,6 +189,18 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     ),
   },
   {
+    accessorKey: "slug",
+    header: "Slug",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground">{row.original.slug ?? "—"}</span>
+    ),
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => <span>{row.original.category ?? "—"}</span>,
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -194,6 +212,44 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         )}
         {row.original.status}
       </Badge>
+    ),
+  },
+  {
+    accessorKey: "created_at",
+    header: "Created",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground">
+        {row.original.created_at
+          ? new Date(row.original.created_at).toLocaleDateString()
+          : "—"}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "updated_at",
+    header: "Updated",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground">
+        {row.original.updated_at
+          ? new Date(row.original.updated_at).toLocaleDateString()
+          : "—"}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "review_count",
+    header: "Reviews",
+    cell: ({ row }) => <span>{row.original.review_count ?? "—"}</span>,
+  },
+  {
+    accessorKey: "average_rating",
+    header: "Avg Rating",
+    cell: ({ row }) => (
+      <span>
+        {typeof row.original.average_rating === "number"
+          ? row.original.average_rating.toFixed(1)
+          : "—"}
+      </span>
     ),
   },
   {
@@ -337,6 +393,7 @@ export function DataTable({
   pageCount,
   pagination: controlledPagination,
   onPaginationChange,
+  initialColumnVisibility,
 }: {
   data: z.infer<typeof schema>[];
   manualPagination?: boolean;
@@ -346,11 +403,15 @@ export function DataTable({
     pageIndex: number;
     pageSize: number;
   }) => void;
+  initialColumnVisibility?: VisibilityState;
 }) {
   const [data, setData] = React.useState(() => initialData);
+  React.useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>(initialColumnVisibility ?? {});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -390,7 +451,14 @@ export function DataTable({
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: (updater) => {
       const next =
-        typeof updater === "function" ? (updater as any)(pagination) : updater;
+        typeof updater === "function"
+          ? (
+              updater as (old: { pageIndex: number; pageSize: number }) => {
+                pageIndex: number;
+                pageSize: number;
+              }
+            )(pagination)
+          : updater;
       if (onPaginationChange) {
         onPaginationChange(next);
       } else {
