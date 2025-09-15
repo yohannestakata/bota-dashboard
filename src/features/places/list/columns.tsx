@@ -61,6 +61,9 @@ export const placeColumns: ColumnDef<PlaceRow>[] = [
     header: ({ column }) => (
       <SortableColumnHeader column={column} title="Name" />
     ),
+    cell: ({ row }) => (
+      <span className="font-medium">{row.original.header ?? "—"}</span>
+    ),
   },
   {
     accessorKey: "slug",

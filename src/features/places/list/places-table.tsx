@@ -95,81 +95,75 @@ export function PlacesTable() {
   const pageCount = Math.max(1, Math.ceil(total / pagination.pageSize));
 
   return (
-    <div className="flex flex-1 flex-col">
-      <DataTable
-        columns={placeColumns}
-        data={rows ?? []}
-        manualPagination
-        pageCount={pageCount}
-        pagination={pagination}
-        onPaginationChange={setPagination}
-        initialColumnVisibility={{
-          description: false,
-          tags: false,
-          slug: true,
-          category: true,
-          created_at: false,
-          updated_at: false,
-          review_count: false,
-          average_rating: false,
-        }}
-        leftControls={
-          <div className="flex w-full items-center gap-2">
-            <Input
-              placeholder="Search places…"
-              className="h-8 w-64"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Select
-              value={active}
-              onValueChange={(v) => setActive(v as typeof active)}
-            >
-              <SelectTrigger className="h-8 w-32">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select
-              value={categoryId?.toString() ?? "all"}
-              onValueChange={(v) =>
-                setCategoryId(v === "all" ? null : Number(v))
-              }
-            >
-              <SelectTrigger className="h-8 w-48">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All categories</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c.id} value={c.id.toString()}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {loadingText && (
-              <span className="text-muted-foreground text-sm">
-                {loadingText}
-              </span>
-            )}
-          </div>
-        }
-        rightControls={
-          <div className="">
-            <Button size="sm">
-              <IconPlus />
-              Add Place
-            </Button>
-          </div>
-        }
-        loading={placesQuery.isPending || placesQuery.isFetching}
-        loadingMessage={loadingText}
-      />
-    </div>
+    <DataTable
+      columns={placeColumns}
+      data={rows ?? []}
+      manualPagination
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+      initialColumnVisibility={{
+        description: true,
+        tags: false,
+        slug: true,
+        category: true,
+        created_at: false,
+        updated_at: false,
+        review_count: false,
+        average_rating: false,
+      }}
+      leftControls={
+        <div className="flex w-full items-center gap-2">
+          <Input
+            placeholder="Search places…"
+            className="h-8 w-64"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <Select
+            value={active}
+            onValueChange={(v) => setActive(v as typeof active)}
+          >
+            <SelectTrigger className="h-8 w-32">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            value={categoryId?.toString() ?? "all"}
+            onValueChange={(v) => setCategoryId(v === "all" ? null : Number(v))}
+          >
+            <SelectTrigger className="h-8 w-48">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All categories</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.id.toString()}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {loadingText && (
+            <span className="text-muted-foreground text-sm">{loadingText}</span>
+          )}
+        </div>
+      }
+      rightControls={
+        <div className="">
+          <Button size="sm">
+            <IconPlus />
+            Add Place
+          </Button>
+        </div>
+      }
+      loading={placesQuery.isPending || placesQuery.isFetching}
+      loadingMessage={loadingText}
+    />
   );
 }

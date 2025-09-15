@@ -63,27 +63,37 @@ export async function fetchPlacesPaged(
     is_active: boolean | null;
     created_at: string;
     updated_at: string;
-    categories: { name: string }[] | null;
-    profiles: { full_name: string | null; username: string | null }[] | null;
+    categories: { name: string }[] | { name: string } | null;
+    profiles:
+      | { full_name: string | null; username: string | null }[]
+      | { full_name: string | null; username: string | null }
+      | null;
   };
-  let rows: PlaceListItem[] = (data || []).map((r: Row) => ({
-    id: r.id,
-    name: r.name,
-    slug: r.slug,
-    description: r.description,
-    category_id: r.category_id ?? null,
-    tags: r.tags ?? null,
-    owner_id: r.owner_id ?? null,
-    is_active: r.is_active ?? true,
-    created_at: r.created_at,
-    updated_at: r.updated_at,
-    category_name:
-      r.categories && r.categories[0]?.name ? r.categories[0].name : null,
-    owner_name:
-      r.profiles && (r.profiles[0]?.full_name || r.profiles[0]?.username)
-        ? r.profiles[0]?.full_name ?? r.profiles[0]?.username ?? null
-        : null,
-  }));
+  let rows: PlaceListItem[] = (data || []).map((r: Row) => {
+    const category = Array.isArray(r.categories)
+      ? r.categories[0]
+      : r.categories;
+    const profile = Array.isArray(r.profiles) ? r.profiles[0] : r.profiles;
+
+    return {
+      id: r.id,
+      name: r.name,
+      slug: r.slug,
+      description: r.description,
+      category_id: r.category_id ?? null,
+      tags: r.tags ?? null,
+      owner_id: r.owner_id ?? null,
+      is_active: r.is_active ?? true,
+      created_at: r.created_at,
+      updated_at: r.updated_at,
+      category_name: category && category.name ? category.name : null,
+      owner_name:
+        profile && (profile.full_name || profile.username)
+          ? profile.full_name ?? profile.username ?? null
+          : null,
+    };
+  });
+
   // Enrich with branch counts for the current page
   const ids = rows.map((r) => r.id);
   if (ids.length > 0) {
@@ -91,6 +101,7 @@ export async function fetchPlacesPaged(
       .from("branches")
       .select("place_id")
       .in("place_id", ids);
+
     if (!branchErr && branchRows) {
       const countMap = new Map<string, number>();
       for (const b of branchRows as { place_id: string }[]) {

@@ -137,7 +137,7 @@ export function DataTable<TData>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 py-4 md:py-6">
+      <div className="flex items-center gap-2 ">
         {leftControls}
         {filterPlaceholder && (
           <Input
@@ -184,7 +184,7 @@ export function DataTable<TData>({
           {rightControls}
         </div>
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden rounded-md border mt-4 md:mt-6">
         <Table>
           <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
