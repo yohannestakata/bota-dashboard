@@ -32,13 +32,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-// This is sample data.
+// This is sample data for nav items only.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Bota Review",
@@ -163,6 +158,44 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user, setUser] = React.useState({
+    name: "",
+    email: "",
+    avatar: "",
+  });
+
+  React.useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const { supabase } = await import("@/lib/supabase/client");
+        const { data: auth } = await supabase.auth.getUser();
+        const u = auth.user;
+        if (!u) return;
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, avatar_url")
+          .eq("id", u.id)
+          .maybeSingle();
+        if (cancelled) return;
+        setUser({
+          name:
+            profile?.full_name ||
+            u.user_metadata?.full_name ||
+            u.email ||
+            "User",
+          email: u.email || "",
+          avatar: profile?.avatar_url || u.user_metadata?.avatar_url || "",
+        });
+      } catch (e) {
+        // noop
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -189,7 +222,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
