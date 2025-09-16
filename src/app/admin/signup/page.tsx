@@ -41,9 +41,11 @@ export default function AdminSignupPage() {
       setFullName("");
       setToken("");
       setTimeout(() => router.push("/login"), 500);
-    } catch (err: any) {
-      toast.error(err?.message ?? "Something went wrong");
-      setMessage(err?.message ?? "Something went wrong");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
+      toast.error(message);
+      setMessage(message);
     } finally {
       setSubmitting(false);
     }
