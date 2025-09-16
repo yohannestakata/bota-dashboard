@@ -8,12 +8,23 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IconDotsVertical } from "@tabler/icons-react";
+import {
+  IconCircleCheckFilled,
+  IconCircleX,
+  IconDotsVertical,
+} from "@tabler/icons-react";
 import { SortableColumnHeader } from "./column-header";
+import {
+  MessageSquareIcon,
+  GlobeIcon,
+  MapPinIcon,
+  ListTreeIcon,
+  PencilIcon,
+  BanIcon,
+} from "lucide-react";
 
 export type PlaceRow = {
   id: number;
@@ -127,6 +138,11 @@ export const placeColumns: ColumnDef<PlaceRow>[] = [
     header: "Status",
     cell: ({ row }) => (
       <Badge variant="outline" className="px-1.5">
+        {row.original.status === "Active" ? (
+          <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
+        ) : (
+          <IconCircleX className="fill-red-500 dark:fill-red-400" />
+        )}{" "}
         {row.original.status}
       </Badge>
     ),
@@ -147,7 +163,7 @@ export const placeColumns: ColumnDef<PlaceRow>[] = [
     id: "actions",
     header: "Actions",
     enableHiding: false,
-    cell: () => (
+    cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -156,12 +172,39 @@ export const placeColumns: ColumnDef<PlaceRow>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View</DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>View Branches</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() =>
+              window.open(
+                `https://botareview.com/place/${row.original.slug}`,
+                "_blank"
+              )
+            }
+          >
+            <GlobeIcon />
+            View on Website
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <MapPinIcon />
+            View Branches
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <MessageSquareIcon />
+            View Reviews
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <ListTreeIcon />
+            View Requests
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Deactivate</DropdownMenuItem>
+          <DropdownMenuItem>
+            <PencilIcon />
+            Edit Place
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <BanIcon />
+            Deactivate
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),

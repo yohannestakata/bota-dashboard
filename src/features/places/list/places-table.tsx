@@ -149,9 +149,6 @@ export function PlacesTable() {
               ))}
             </SelectContent>
           </Select>
-          {loadingText && (
-            <span className="text-muted-foreground text-sm">{loadingText}</span>
-          )}
         </div>
       }
       rightControls={
