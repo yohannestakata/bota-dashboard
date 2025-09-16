@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { GalleryVerticalEnd } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -33,8 +34,20 @@ export default function AdminSignupPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, full_name: fullName, token }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Failed to create admin");
+      let json: unknown = null;
+      try {
+        json = await res.json();
+      } catch {
+        // Non-JSON error (e.g., HTML/redirect) — handle below
+      }
+      if (!res.ok) {
+        let message = `Request failed (${res.status})`;
+        if (typeof json === "object" && json !== null && "error" in json) {
+          const errVal = (json as { error?: unknown }).error;
+          if (typeof errVal === "string") message = errVal;
+        }
+        throw new Error(message);
+      }
       toast.success("Admin created successfully. You can now log in.");
       setEmail("");
       setPassword("");
@@ -56,10 +69,21 @@ export default function AdminSignupPage() {
       <div className="w-full max-w-sm">
         <Card>
           <CardHeader>
-            <CardTitle>Admin Signup</CardTitle>
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-md">
+                <GalleryVerticalEnd className="size-6" />
+              </div>
+              <CardTitle>Admin Signup</CardTitle>
+            </div>
             <CardDescription>
               Create an administrator account with a token.
             </CardDescription>
+            <div className="text-center text-sm">
+              Already have an account?{" "}
+              <a href="/login" className="underline underline-offset-4">
+                Login
+              </a>
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={onSubmit} className="flex flex-col gap-4">
@@ -109,12 +133,10 @@ export default function AdminSignupPage() {
             </form>
           </CardContent>
         </Card>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <a href="/login" className="underline">
-            Login
-          </a>
-        </p>
+        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4 mt-4">
+          By clicking continue, you agree to our{" "}
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </div>
       </div>
     </div>
   );

@@ -8,11 +8,13 @@ export async function middleware(request: NextRequest) {
 
   // Protect dashboard group paths
   const pathname = request.nextUrl.pathname;
+  const isApi = pathname.startsWith("/api/");
   // Treat everything under the dashboard app as protected except explicit auth routes
   const isDashboard = !(
     pathname.startsWith("/login") ||
     pathname.startsWith("/admin/signup") ||
-    pathname.startsWith("/auth/")
+    pathname.startsWith("/auth/") ||
+    isApi
   );
   const isAuthPage =
     pathname.startsWith("/login") ||
@@ -54,6 +56,9 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!isDashboard) return response;
+
+  // Allow API routes to pass through (e.g., token-gated signup)
+  if (isApi) return response;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

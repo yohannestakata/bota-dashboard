@@ -43,15 +43,9 @@ export function NavUser({
   }
 
   const initials = (() => {
-    const src = user?.email || "U";
-    const namePart = (src || "U").split("@")[0];
-    const letters = namePart
-      .replace(/[^a-zA-Z]/g, " ")
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean);
-    const first = letters[0]?.charAt(0).toUpperCase() || "U";
-    const second = letters[1]?.charAt(0).toUpperCase() || "";
+    const src = user?.name || "U";
+    const first = src.charAt(0).toUpperCase();
+    const second = src.split(" ").slice(1).join(" ").charAt(0).toUpperCase();
     return `${first}${second}`;
   })();
 
