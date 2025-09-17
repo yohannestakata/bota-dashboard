@@ -175,7 +175,9 @@ export function DataTable<TData>({
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      {typeof column.columnDef.header === "string"
+                        ? (column.columnDef.header as string)
+                        : column.id}
                     </DropdownMenuCheckboxItem>
                   );
                 })}
