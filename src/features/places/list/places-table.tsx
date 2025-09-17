@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { IconPlus } from "@tabler/icons-react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/ui/data-table";
 import { placeColumns, type PlaceRow } from "./columns";
@@ -19,12 +17,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AddPlaceDialog } from "@/features/places/list/add-place-dialog";
 
 function toRows(
   api: Awaited<ReturnType<typeof fetchPlacesPaged>>["rows"]
 ): PlaceRow[] {
-  return api.map((p, idx) => ({
-    id: idx + 1,
+  return api.map((p) => ({
+    id: p.id,
     header: p.name,
     type: "Place",
     status: p.is_active ? "Active" : "Inactive",
@@ -151,14 +150,7 @@ export function PlacesTable() {
           </Select>
         </div>
       }
-      rightControls={
-        <div className="">
-          <Button size="sm">
-            <IconPlus />
-            Add Place
-          </Button>
-        </div>
-      }
+      rightControls={<AddPlaceDialog />}
       loading={placesQuery.isPending || placesQuery.isFetching}
       loadingMessage={loadingText}
     />

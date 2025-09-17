@@ -3,31 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  IconCircleCheckFilled,
-  IconCircleX,
-  IconDotsVertical,
-} from "@tabler/icons-react";
+// No dropdown or button imports needed here; actions handled by PlaceActionsMenu
+import { IconCircleCheckFilled, IconCircleX } from "@tabler/icons-react";
 import { SortableColumnHeader } from "./column-header";
-import {
-  MessageSquareIcon,
-  GlobeIcon,
-  MapPinIcon,
-  ListTreeIcon,
-  PencilIcon,
-  BanIcon,
-} from "lucide-react";
+import { PlaceActionsMenu } from "./place-actions-menu";
 
 export type PlaceRow = {
-  id: number;
+  id: string;
   header: string; // Name
   type: string;
   status: string;
@@ -164,49 +146,11 @@ export const placeColumns: ColumnDef<PlaceRow>[] = [
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <IconDotsVertical />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() =>
-              window.open(
-                `https://botareview.com/place/${row.original.slug}`,
-                "_blank"
-              )
-            }
-          >
-            <GlobeIcon />
-            View on Website
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <MapPinIcon />
-            View Branches
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <MessageSquareIcon />
-            View Reviews
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ListTreeIcon />
-            View Requests
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <PencilIcon />
-            Edit Place
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <BanIcon />
-            Deactivate
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <PlaceActionsMenu
+        id={row.original.id}
+        isActive={row.original.status === "Active"}
+        slug={row.original.slug}
+      />
     ),
   },
   {

@@ -127,3 +127,18 @@ export async function fetchCategoriesLite(): Promise<CategoryLite[]> {
   if (error) throw error;
   return (data || []) as CategoryLite[];
 }
+
+export type TagLite = { id: number; name: string };
+export async function fetchTagsLite(): Promise<TagLite[]> {
+  const { data, error } = await supabase
+    .from("tags")
+    .select("id, name")
+    .order("name");
+  if (error) {
+    console.error("[places] fetchTagsLite error", error);
+  } else {
+    console.log("[places] fetchTagsLite result", data?.length ?? 0);
+  }
+  if (error) throw error;
+  return (data || []) as TagLite[];
+}

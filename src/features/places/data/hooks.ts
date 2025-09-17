@@ -1,10 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchCategoriesLite, fetchPlacesPaged } from "./queries";
+import {
+  fetchCategoriesLite,
+  fetchPlacesPaged,
+  fetchTagsLite,
+} from "./queries";
 
 export function useCategoriesLite() {
   return useQuery({
     queryKey: ["categories", "lite"],
     queryFn: () => fetchCategoriesLite(),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useTagsLite() {
+  return useQuery({
+    queryKey: ["tags", "lite"],
+    queryFn: () => fetchTagsLite(),
     staleTime: 5 * 60 * 1000,
   });
 }
