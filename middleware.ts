@@ -4,7 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(request: NextRequest) {
   // Keep session cookies fresh
-  let response = await updateSession(request);
+  const response = await updateSession(request);
 
   // Protect dashboard group paths
   const pathname = request.nextUrl.pathname;
@@ -12,13 +12,13 @@ export async function middleware(request: NextRequest) {
   // Treat everything under the dashboard app as protected except explicit auth routes
   const isDashboard = !(
     pathname.startsWith("/login") ||
-    pathname.startsWith("/admin/signup") ||
+    pathname.startsWith("/signup") ||
     pathname.startsWith("/auth/") ||
     isApi
   );
   const isAuthPage =
     pathname.startsWith("/login") ||
-    pathname.startsWith("/admin/signup") ||
+    pathname.startsWith("/signup") ||
     pathname.startsWith("/auth/");
 
   // If visiting auth pages and already authenticated admin, redirect to dashboard

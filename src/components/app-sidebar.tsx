@@ -18,6 +18,7 @@ import {
   BirdIcon,
 } from "lucide-react";
 
+import Link from "next/link";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
@@ -205,14 +206,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a
+              <Link
                 href="https://botareview.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <BirdIcon className="!size-5" />
                 <span className="text-base font-semibold">Bota Review</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
