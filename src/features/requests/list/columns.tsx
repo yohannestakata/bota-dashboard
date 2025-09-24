@@ -27,7 +27,7 @@ export function buildAddRequestColumns(
           id: "place_name",
           accessorKey: "proposed_place.name",
           header: "Place Name",
-          cell: ({ row }) => (
+          cell: ({ row }: { row: { original: AddRequestRow } }) => (
             <span className="font-medium">
               {(row.original.proposed_place as ProposedPlace)?.name || "—"}
             </span>
@@ -47,13 +47,14 @@ export function buildAddRequestColumns(
       id: "created",
       accessorKey: "created_at",
       header: "Created",
-      cell: ({ row }) => timeAgo(row.original.created_at),
+      cell: ({ row }: { row: { original: AddRequestRow } }) =>
+        timeAgo(row.original.created_at),
     },
     {
       id: "status",
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <Badge variant="outline">
           {row.original.status === "approved" ? (
             <CheckIcon className="text-green-500" />
@@ -72,7 +73,7 @@ export function buildAddRequestColumns(
             id: "category",
             accessorKey: "proposed_place.category_id",
             header: "Category",
-            cell: ({ row }) => (
+            cell: ({ row }: { row: { original: AddRequestRow } }) => (
               <span className="text-muted-foreground">
                 {(row.original.proposed_place as ProposedPlace)?.category_id ??
                   "—"}
@@ -85,7 +86,7 @@ export function buildAddRequestColumns(
       id: "city",
       accessorKey: "proposed_branch.city",
       header: "City",
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <span className="text-muted-foreground">
           {(row.original.proposed_branch as ProposedBranch)?.city || "—"}
         </span>
@@ -95,7 +96,7 @@ export function buildAddRequestColumns(
       id: "phone",
       accessorKey: "proposed_branch.phone",
       header: "Phone",
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <span className="text-muted-foreground">
           {(row.original.proposed_branch as ProposedBranch)?.phone || "—"}
         </span>
@@ -105,7 +106,7 @@ export function buildAddRequestColumns(
       id: "address1",
       accessorKey: "proposed_branch.address_line1",
       header: "Address 1",
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <span className="text-muted-foreground">
           {(row.original.proposed_branch as ProposedBranch)?.address_line1 ||
             "—"}
@@ -127,7 +128,7 @@ export function buildAddRequestColumns(
       id: "main_branch",
       accessorKey: "proposed_branch.is_main_branch",
       header: "Main Branch",
-      cell: ({ row }) => {
+      cell: ({ row }: { row: { original: AddRequestRow } }) => {
         const isMain = (row.original.proposed_branch as ProposedBranch)
           ?.is_main_branch;
         return <Badge variant="outline">{isMain ? "Main" : "Secondary"}</Badge>;
@@ -137,7 +138,7 @@ export function buildAddRequestColumns(
       id: "submitted_by",
       accessorKey: "profiles.full_name",
       header: "Submitted By",
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <span className="text-muted-foreground">
           {row.original.profiles?.full_name ||
             row.original.profiles?.username ||
@@ -149,7 +150,7 @@ export function buildAddRequestColumns(
       id: "actions",
       header: "Actions",
       enableHiding: false,
-      cell: ({ row }) => (
+      cell: ({ row }: { row: { original: AddRequestRow } }) => (
         <RequestActionsMenu
           id={row.original.id}
           status={row.original.status}

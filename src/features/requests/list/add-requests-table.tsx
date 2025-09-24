@@ -51,8 +51,10 @@ export function AddRequestsTable() {
   const reviewPlace = useReviewPlaceAddRequest();
   const reviewBranch = useReviewBranchAddRequest();
 
-  const rows =
-    tab === "place" ? placeReqs.data?.rows ?? [] : branchReqs.data?.rows ?? [];
+  const rows: RequestRow[] =
+    tab === "place"
+      ? (placeReqs.data?.rows as unknown as RequestRow[]) ?? []
+      : (branchReqs.data?.rows as unknown as RequestRow[]) ?? [];
   const total =
     tab === "place" ? placeReqs.data?.total ?? 0 : branchReqs.data?.total ?? 0;
   const loading =
@@ -74,7 +76,7 @@ export function AddRequestsTable() {
         onViewDetails: (id) => {
           const request = rows.find((r) => r.id === id);
           if (request) {
-            setSelectedRequest(request);
+            setSelectedRequest(request as RequestRow);
             setDetailsOpen(true);
           }
         },

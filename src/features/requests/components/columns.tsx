@@ -237,7 +237,7 @@ export function buildRequestColumns(
       ? [
           {
             header: "Category",
-            cell: ({ row }) => (
+            cell: ({ row }: { row: { original: RequestRow } }) => (
               <span className="text-muted-foreground">
                 {row.original.proposed_place?.category_id ?? "—"}
               </span>

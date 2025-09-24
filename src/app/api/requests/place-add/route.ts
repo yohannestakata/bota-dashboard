@@ -84,7 +84,12 @@ export async function PATCH(req: NextRequest) {
       { status: 500 }
     );
 
-  const body = await req.json().catch(() => ({} as any));
+  type PatchBody = {
+    id?: string;
+    action?: "approve" | "reject";
+    reason?: string;
+  };
+  const body: PatchBody = await req.json().catch(() => ({} as PatchBody));
   const id: string | undefined = body?.id;
   const action: "approve" | "reject" | undefined = body?.action;
   const rejectReason: string | undefined = body?.reason;
@@ -117,8 +122,12 @@ export async function PATCH(req: NextRequest) {
   if (!reqRow)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const proposedPlace = (reqRow as any).proposed_place || {};
-  const proposedBranch = (reqRow as any).proposed_branch || {};
+  const proposedPlace =
+    (reqRow as { proposed_place: Record<string, unknown> | null })
+      .proposed_place || {};
+  const proposedBranch =
+    (reqRow as { proposed_branch: Record<string, unknown> | null })
+      .proposed_branch || {};
 
   const { data: place, error: placeErr } = await supabaseAdmin
     .from("places")
