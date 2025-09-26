@@ -4,6 +4,8 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import ThemeToggle from "@/components/ui/theme-toggle";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -26,7 +28,20 @@ export function SiteHeader() {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <h1 className="text-base font-medium">{title}</h1>
+        <Link
+          href="/"
+          aria-label="Bota Review"
+          className="hidden sm:inline-flex items-center"
+        >
+          <Image
+            src="https://botareview.com/logo-icon-and-wordmark.svg"
+            alt="Bota Review"
+            width={110}
+            height={24}
+            priority
+          />
+        </Link>
+        <h1 className="text-base font-medium sm:ml-2">{title}</h1>
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
         </div>

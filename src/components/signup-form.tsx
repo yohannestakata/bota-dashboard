@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { BirdIcon } from "lucide-react";
+import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -71,9 +71,13 @@ export function SignupForm({
               href="https://botareview.com"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <BirdIcon className="size-6" />
-              </div>
+              <Image
+                src="https://botareview.com/logo-icon-and-wordmark.svg"
+                alt="Bota Review"
+                width={120}
+                height={28}
+                priority
+              />
               <span className="sr-only">Bota Review</span>
             </Link>
             <h1 className="text-xl font-bold">Create your account</h1>

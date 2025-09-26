@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { BirdIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,19 @@ export function LoginForm({
       return;
     }
     toast.success("Welcome back");
-    router.push("/");
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const dest = params.get("redirect") || "/";
+      // Force a full reload so middleware sees fresh auth cookies
+      if (dest.startsWith("http")) {
+        window.location.assign(dest);
+      } else {
+        window.location.assign(dest);
+      }
+    } catch {
+      // Fallback to client navigation
+      router.replace("/");
+    }
   }
 
   return (
@@ -58,9 +70,13 @@ export function LoginForm({
               href="https://botareview.com"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <BirdIcon className="size-6" />
-              </div>
+              <Image
+                src="https://botareview.com/logo-icon-and-wordmark.svg"
+                alt="Bota Review"
+                width={120}
+                height={28}
+                priority
+              />
               <span className="sr-only">Bota Review</span>
             </Link>
             <h1 className="text-xl font-bold">Welcome to Bota Review Admin</h1>

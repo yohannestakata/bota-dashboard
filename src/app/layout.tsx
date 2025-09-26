@@ -18,6 +18,29 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Bota Review Dashboard",
   description: "Bota Review Dashboard",
+  themeColor: "#0B0B0C",
+  manifest: "https://botareview.com/site.webmanifest",
+  icons: {
+    icon: [
+      {
+        url: "https://botareview.com/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "https://botareview.com/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      { url: "https://botareview.com/favicon.ico" },
+    ],
+    apple: "https://botareview.com/apple-touch-icon.png",
+  },
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: { index: false, follow: false },
+  },
 };
 
 export default function RootLayout({
