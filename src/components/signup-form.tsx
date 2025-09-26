@@ -72,10 +72,10 @@ export function SignupForm({
               className="flex flex-col items-center gap-2 font-medium"
             >
               <Image
-                src="https://botareview.com/logo-icon-and-wordmark.svg"
+                src="https://botareview.com/logo-icon.svg"
                 alt="Bota Review"
-                width={120}
-                height={28}
+                width={32}
+                height={32}
                 priority
               />
               <span className="sr-only">Bota Review</span>

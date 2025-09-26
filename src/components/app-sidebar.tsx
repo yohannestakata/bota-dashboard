@@ -32,6 +32,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
 
 // This is sample data for nav items only.
 const data = {
@@ -211,7 +212,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <BirdIcon className="!size-5" />
+                <div className="w-8 h-8 bg-green-950 rounded-full grid place-items-center">
+                  <Image
+                    src="https://botareview.com/logo-icon.svg"
+                    alt="Bota Review"
+                    width={20}
+                    height={20}
+                  />
+                </div>
                 <span className="text-base font-semibold">Bota Review</span>
               </Link>
             </SidebarMenuButton>
