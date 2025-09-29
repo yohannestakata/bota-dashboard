@@ -28,8 +28,8 @@ export function AddCuisineDialog() {
     setDescription("");
   }, []);
 
-  const { mutate: create, isLoading } = useCreateCuisine();
-  const canSave = name.trim().length >= 2 && !isLoading;
+  const { mutate: create, isPending } = useCreateCuisine();
+  const canSave = name.trim().length >= 2 && !isPending;
 
   return (
     <Dialog
@@ -73,7 +73,7 @@ export function AddCuisineDialog() {
             type="button"
             variant="outline"
             onClick={() => reset()}
-            disabled={isLoading}
+            disabled={isPending}
           >
             Reset
           </Button>
@@ -87,7 +87,7 @@ export function AddCuisineDialog() {
               )
             }
           >
-            {isLoading ? (
+            {isPending ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="size-4 animate-spin" /> Saving...
               </span>

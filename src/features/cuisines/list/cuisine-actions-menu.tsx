@@ -37,7 +37,7 @@ export function CuisineActionsMenu({
       setD(description ?? "");
     }
   }, [editOpen, name, description]);
-  const canSave = n.trim().length >= 2 && !update.isLoading;
+  const canSave = n.trim().length >= 2 && !update.isPending;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,18 +57,18 @@ export function CuisineActionsMenu({
           title="Delete cuisine?"
           description="This action cannot be undone. Places/branches may reference this cuisine."
           confirmText="Delete"
-          loading={del.isLoading}
+          loading={del.isPending}
           onConfirm={async () => {
             await del.mutateAsync(id);
           }}
         >
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            {del.isLoading ? (
+            {del.isPending ? (
               <Loader2Icon className="animate-spin" />
             ) : (
               <TrashIcon />
             )}
-            {del.isLoading ? "Deleting..." : "Delete"}
+            {del.isPending ? "Deleting..." : "Delete"}
           </DropdownMenuItem>
         </WarningDialog>
       </DropdownMenuContent>
@@ -115,7 +115,7 @@ export function CuisineActionsMenu({
                   }}
                   disabled={!canSave}
                 >
-                  {update.isLoading ? (
+                  {update.isPending ? (
                     <span className="inline-flex items-center gap-2">
                       <Loader2Icon className="size-4 animate-spin" /> Saving...
                     </span>
