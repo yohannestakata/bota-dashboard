@@ -18,7 +18,7 @@ export async function fetchPlacesPaged(
     .from("places")
     .select(
       `
-      id, name, slug, description, category_id, tags, owner_id, is_active, created_at, updated_at,
+      id, name, slug, description, category_id, owner_id, is_active, created_at, updated_at,
       profiles:owner_id ( full_name, username ),
       categories ( name )
     `,
@@ -58,7 +58,6 @@ export async function fetchPlacesPaged(
     slug: string;
     description: string | null;
     category_id: number | null;
-    tags: string[] | null;
     owner_id: string | null;
     is_active: boolean | null;
     created_at: string;
@@ -81,7 +80,7 @@ export async function fetchPlacesPaged(
       slug: r.slug,
       description: r.description,
       category_id: r.category_id ?? null,
-      tags: r.tags ?? null,
+      tags: null,
       owner_id: r.owner_id ?? null,
       is_active: r.is_active ?? true,
       created_at: r.created_at,

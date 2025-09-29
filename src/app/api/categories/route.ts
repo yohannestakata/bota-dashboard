@@ -1,31 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
-type CreatePlaceBody = {
-  name: string;
-  categoryId: number | null;
+type Body = {
+  name?: string;
   description?: string | null;
-  tagIds?: number[];
+  icon_name?: string | null;
 };
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as CreatePlaceBody;
-    const baseName = (body?.name || "").trim();
-    if (!baseName) {
+    const body = (await req.json()) as Body;
+    const name = (body?.name || "").trim();
+    if (!name || name.length < 2)
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
-    }
 
-    // Verify user is admin
     const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          get: (name: string) => cookieStore.get(name)?.value,
+          get: (n: string) => cookieStore.get(n)?.value,
           set: () => {},
           remove: () => {},
         },
@@ -50,30 +47,22 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
 
-    const categoryId = body.categoryId;
-    const description = body.description ?? null;
-    const tagIds = Array.isArray(body.tagIds) ? body.tagIds : [];
+    const description = (body.description ?? null) as string | null;
+    const icon_name = (body.icon_name ?? null) as string | null;
 
-    let created: { id: string } | null = null;
+    let created: { id: number } | null = null;
     let lastErr: unknown = null;
-    for (let attempt = 0; attempt < 5; attempt++) {
-      const candidateName =
-        attempt === 0 ? baseName : `${baseName} ${attempt + 1}`;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const candidateName = attempt === 0 ? name : `${name} ${attempt + 1}`;
       const { data, error } = await supabaseAdmin
-        .from("places")
-        .insert({
-          name: candidateName,
-          description,
-          category_id: categoryId,
-        })
+        .from("categories")
+        .insert({ name: candidateName, description, icon_name })
         .select("id")
         .maybeSingle();
-
       if (!error && data) {
         created = data;
         break;
       }
-
       const errCode = (error as { code?: string } | null)?.code;
       if (
         error &&
@@ -93,30 +82,10 @@ export async function POST(req: NextRequest) {
           : "Duplicate slug, please try another name";
       return NextResponse.json({ error: msg }, { status: 400 });
     }
-
-    if (created.id && tagIds.length) {
-      // Find main branch for the newly created place
-      const { data: mainBranch, error: branchErr } = await supabaseAdmin
-        .from("branches")
-        .select("id")
-        .eq("place_id", created.id)
-        .eq("is_main_branch", true)
-        .maybeSingle();
-      if (branchErr) throw new Error(branchErr.message);
-      if (mainBranch?.id) {
-        const { error: tagErr } = await supabaseAdmin
-          .from("branch_tags")
-          .insert(
-            tagIds.map((tagId) => ({ branch_id: mainBranch.id, tag_id: tagId }))
-          );
-        if (tagErr) throw new Error(tagErr.message);
-      }
-    }
-
     return NextResponse.json({ id: created.id }, { status: 200 });
   } catch (e) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to create place" },
+      { error: e instanceof Error ? e.message : "Failed to create category" },
       { status: 500 }
     );
   }

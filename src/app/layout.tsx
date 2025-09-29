@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
@@ -18,7 +18,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Bota Review Dashboard",
   description: "Bota Review Dashboard",
-  themeColor: "#0B0B0C",
   manifest: "https://botareview.com/site.webmanifest",
   icons: {
     icon: [
@@ -41,6 +40,10 @@ export const metadata: Metadata = {
     follow: false,
     googleBot: { index: false, follow: false },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0B0B0C",
 };
 
 export default function RootLayout({

@@ -93,6 +93,24 @@ Sidebar sections and pages:
 ### 5) Categories and Taxonomies
 
 - Manage `categories`: `name`, `slug`, `description`, `icon_name`.
+
+  - List with pagination and search (by `name`, `slug`, `description`).
+  - Create category: required `name`; optional `description`, `icon_name`.
+  - Update category: edit `name`, `description`, `icon_name`.
+  - Delete category: confirm irreversible delete; block if FK constraints prevent deletion (surface friendly error).
+  - Slug should be generated in DB and unique. If duplicate name insertion fails, show a readable error or attempt a suffix retry server-side.
+  - Show `created_at`, `updated_at` columns; sort by `created_at` desc by default.
+  - Admin-only mutations via server API; reads via client are fine under RLS.
+  - Validation: trim inputs; `name` length 2–80; `icon_name` length up to 64; `description` up to 500.
+
+- Manage `cuisine_types`:
+  - List with pagination and search (by `name`, `description`).
+  - Create cuisine: required `name`; optional `description`.
+  - Update cuisine: edit `name`, `description`.
+  - Delete cuisine: confirm irreversible delete; block if FK constraints (e.g., `place_cuisines`, `branch_cuisines`) prevent deletion with a helpful error.
+  - Show `created_at`; sort by `created_at` desc by default.
+  - Admin-only mutations via server API; reads via client are fine under RLS.
+  - Validation: trim inputs; `name` length 2–80; `description` up to 500.
 - Manage `cuisine_types` and mappings (`place_cuisines`, `branch_cuisines`).
 - Manage `amenity_types` (key/name/icon) used by `branch_amenities`.
 - Manage `photo_categories` used by `review_photos` and other media lists.

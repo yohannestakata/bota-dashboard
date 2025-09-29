@@ -7,15 +7,20 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
 export default function ModeToggle() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+
+  // Avoid hydration mismatch by rendering a deterministic icon until mounted
+  const isDark = mounted ? resolvedTheme === "dark" : false;
 
   return (
     <Button
       variant="outline"
       size="icon"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme((isDark ? "light" : "dark") as "light" | "dark")}
     >
-      {theme === "dark" ? <SunIcon size={24} /> : <MoonIcon size={24} />}
+      {isDark ? <SunIcon size={24} /> : <MoonIcon size={24} />}
     </Button>
   );
 }
