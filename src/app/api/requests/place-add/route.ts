@@ -92,7 +92,7 @@ export async function PATCH(req: NextRequest) {
   const body: PatchBody = await req.json().catch(() => ({} as PatchBody));
   const id: string | undefined = body?.id;
   const action: "approve" | "reject" | undefined = body?.action;
-  const rejectReason: string | undefined = body?.reason;
+  // const rejectReason: string | undefined = body?.reason; // not used currently
   if (!id || !action)
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
@@ -156,7 +156,7 @@ export async function PATCH(req: NextRequest) {
       country: proposedBranch.country ?? null,
       latitude: proposedBranch.latitude ?? null,
       longitude: proposedBranch.longitude ?? null,
-      is_main_branch: true,
+      is_main_branch: proposedBranch.is_main_branch ?? false,
       is_active: true,
     });
     if (branchErr)
